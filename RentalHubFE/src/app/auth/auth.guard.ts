@@ -35,21 +35,13 @@ export class AuthGuard implements CanActivate {
     return this.accountService.getCurrentUser.pipe(
       take(1),
       mergeMap(async (user) => {
-        console.log('Token before call api: ', user?.ACToken, user?.RFToken);
-        if (user?.ACToken === null && user?.RFToken) {
-          try {
-            const auth = await this.authService
-              .resetACToken(user.RFToken)
-              .toPromise();
-            console.log(
-              '🚀 ~ file: auth.guard.ts:35 ~ AuthGuard ~ map ~ auth:'
-            );
-            return true;
-          } catch (error) {
-            console.log('🚀 ~ AuthGuard ~ map ~ errorMsg:', error);
-          }
+        console.log('🚀 ~ AuthGuard ~ mergeMap ~ user:', user);
+
+        console.log('Token before call api: ', user?.getACToken());
+        if (user?.getACToken() === null) {
+          return false;
         }
-        if (user?.ACToken && user?.RFToken) {
+        if (user?.getACToken()) {
           return true;
         }
         this.notifierService.notify(

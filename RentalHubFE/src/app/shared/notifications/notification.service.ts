@@ -27,10 +27,10 @@ export class NotificationService {
     return this.http.get<resDataDTO>(environment.baseUrl + 'notification').pipe(
       catchError(handleError),
       tap((res) => {
-        if (res.data) {
-          console.log('Getting notifications successfully!', res.data);
-          this.setCurrentNotifications(res.data.notifications);
-          this.setTotalNotifications(res.data.totalNewNotification);
+        if (res.message) {
+          console.log('Getting notifications successfully!', res.message);
+          this.setCurrentNotifications(res.message.notifications);
+          this.setTotalNotifications(res.message.totalNewNotification);
         }
       })
     );

@@ -43,9 +43,9 @@ export class AddNewEmployeeDialogComponent {
         .addNewInspector(form.email, form.pw, form.repw)
         .subscribe(
           (res) => {
-            if (res.data) {
+            if (res.message) {
               this.isLoading = false;
-              this.newInspector.emit(res.data);
+              this.newInspector.emit(res.message);
               this.notifierService.notify(
                 'success',
                 'Thêm tài khoản kiểm duyệt thành công!'

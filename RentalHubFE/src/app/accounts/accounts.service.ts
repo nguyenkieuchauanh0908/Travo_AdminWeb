@@ -21,7 +21,7 @@ export class AccountService {
     console.log('on getting current userId ...');
     let uId: string | null | undefined = null;
     this.getCurrentUser.subscribe((user) => {
-      uId = user?._id;
+      // uId = user?._id;
     });
     console.log('current uId: ', uId);
     return uId;
@@ -81,10 +81,10 @@ export class AccountService {
         tap((res) => {
           this.getCurrentUser.subscribe((currentUser) => {
             if (currentUser) {
-              currentUser._fname = res.data._fname;
-              currentUser._lname = res.data._lname;
-              currentUser._email = res.data._email;
-              currentUser._phone = res.data._phone;
+              // currentUser._fname = res.data._fname;
+              // currentUser._lname = res.data._lname;
+              // currentUser._email = res.data._email;
+              // currentUser._phone = res.data._phone;
               updatedtUser = currentUser;
             }
           });
@@ -110,7 +110,7 @@ export class AccountService {
         tap((res) => {
           this.getCurrentUser.subscribe((currentUser) => {
             if (currentUser) {
-              currentUser._avatar = res.data._avatar;
+              // currentUser._avatar = res.data._avatar;
               updatedtUser = currentUser;
             }
           });

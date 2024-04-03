@@ -81,7 +81,7 @@ export class PostEditDialogComponent implements OnInit {
         )
         .subscribe(
           (res) => {
-            if (res.data) {
+            if (res.message) {
               this.notifierService.notify(
                 'success',
                 'Cập nhật bài viết thành công!'
@@ -195,7 +195,7 @@ export class PostEditDialogComponent implements OnInit {
       this.postService
         .updatePostStatus(this.data._id, false)
         .subscribe((res) => {
-          if (res.data) {
+          if (res.message) {
             this.notifierService.hideAll();
             this.notifierService.notify('success', 'Gỡ bài viết thành công!');
           }

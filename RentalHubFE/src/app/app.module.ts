@@ -32,7 +32,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
       useClass: AuthInterceptorService,
       multi: true,
     },
-    AuthGuard,
+    // AuthGuard,
   ],
   bootstrap: [AppComponent],
 })

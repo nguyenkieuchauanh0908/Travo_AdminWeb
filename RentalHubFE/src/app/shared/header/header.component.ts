@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   error: string = '';
   searchResultChangedSub: Subscription = new Subscription();
   user!: User | null;
-  fullName!: string;
+  fullName!: string | null | undefined;
   isAuthenticatedUser: boolean = false;
   notificationList!: any;
   notificationTotals!: number;
@@ -51,9 +51,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isAuthenticatedUser = !!user;
         console.log('User is authenticated: ', this.isAuthenticatedUser);
         this.user = user;
-        if (this.user?._fname && this.user?._lname) {
-          this.fullName = this.user?._fname + ' ' + this.user._lname;
-        }
+
+        this.fullName = this.user?.email;
       });
 
     if (this.isAuthenticatedUser) {
@@ -80,62 +79,62 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {}
 
   toMyPosting() {
-    let uId = this.user?._id;
-    this.router.navigate(['/profile/posting-history/', uId]);
+    // let uId = this.user?._id;
+    // this.router.navigate(['/profile/posting-history/', uId]);
   }
 
   toPostNew() {
-    if (this.user !== null) {
-      let uId = this.user?._id;
-      this.router.navigate(['/profile/post-new/', uId]);
-    } else {
-      this.notifierService.notify('error', 'Vui lòng đăng nhập để đăng bài!');
-    }
+    // if (this.user !== null) {
+    //   let uId = this.user?._id;
+    //   this.router.navigate(['/profile/post-new/', uId]);
+    // } else {
+    //   this.notifierService.notify('error', 'Vui lòng đăng nhập để đăng bài!');
+    // }
   }
 
   toSeeAllNotifications() {
-    this.router.navigate(['/profile/notifications/', this.user?._id]);
+    // this.router.navigate(['/profile/notifications/', this.user?._id]);
   }
 
-  onSearchByKeyword(searchForm: any) {
-    console.log('Your keyword: ', searchForm.search);
-    if (searchForm.search) {
-      this.postService
-        .searchPostsByKeyword(searchForm.search, 1, 5)
-        .pipe(takeUntil(this.$destroy))
-        .subscribe(
-          (res) => {
-            this.postService.searchResultsChanged.next([...res.data]);
-            console.log('On navigating to search result page...');
-            this.router.navigate(
-              [
-                '/posts/search',
-                {
-                  keyword: searchForm.search,
-                },
-              ],
-              {
-                state: {
-                  searchResult: res.data,
-                  pagination: res.pagination,
-                  keyword: searchForm.search,
-                },
-              }
-            );
-          },
-          (errorMsg) => {
-            this.isLoading = false;
-            this.error = errorMsg;
-            console.log(this.error);
-            this.notifierService.notify('error', errorMsg);
-          }
-        );
-    } else {
-      this.router.navigate(['']).then(() => {
-        window.location.reload();
-      });
-    }
-  }
+  // onSearchByKeyword(searchForm: any) {
+  //   console.log('Your keyword: ', searchForm.search);
+  //   if (searchForm.search) {
+  //     this.postService
+  //       .searchPostsByKeyword(searchForm.search, 1, 5)
+  //       .pipe(takeUntil(this.$destroy))
+  //       .subscribe(
+  //         (res) => {
+  //           this.postService.searchResultsChanged.next([...res.data]);
+  //           console.log('On navigating to search result page...');
+  //           this.router.navigate(
+  //             [
+  //               '/posts/search',
+  //               {
+  //                 keyword: searchForm.search,
+  //               },
+  //             ],
+  //             {
+  //               state: {
+  //                 searchResult: res.data,
+  //                 pagination: res.pagination,
+  //                 keyword: searchForm.search,
+  //               },
+  //             }
+  //           );
+  //         },
+  //         (errorMsg) => {
+  //           this.isLoading = false;
+  //           this.error = errorMsg;
+  //           console.log(this.error);
+  //           this.notifierService.notify('error', errorMsg);
+  //         }
+  //       );
+  //   } else {
+  //     this.router.navigate(['']).then(() => {
+  //       window.location.reload();
+  //     });
+  //   }
+  // }
 
   toHome() {
     this.router.navigate(['']);
@@ -163,15 +162,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //     sub.unsubscribe();
     //   });
     let logoutObs: Observable<resDataDTO>;
-    logoutObs = this.authService.logout(this.user?.RFToken);
+    logoutObs = this.authService.logout();
     logoutObs.subscribe();
     this.router.navigate(['/posts']);
   }
 
   updateAvatar() {
-    const dialogRef = this.dialog.open(UpdateAvatarDialogComponent, {
-      width: '400px',
-      data: this.user?._avatar,
-    });
+    // const dialogRef = this.dialog.open(UpdateAvatarDialogComponent, {
+    //   width: '400px',
+    //   data: this.user?._avatar,
+    // });
   }
 }

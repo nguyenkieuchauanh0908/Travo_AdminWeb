@@ -96,7 +96,7 @@ export class DashboardComponent implements OnInit {
   toMyLoginDetail() {
     const dialogRef = this.dialog.open(LoginDetailUpdateDialogComponent, {
       width: '400px',
-      data: this.myProfile?._email,
+      data: this.myProfile?.email,
     });
   }
 
@@ -108,7 +108,7 @@ export class DashboardComponent implements OnInit {
     });
     const sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
       let logoutObs: Observable<resDataDTO>;
-      logoutObs = this.authService.logout(this.myProfile?.RFToken);
+      logoutObs = this.authService.logout();
       logoutObs.subscribe();
       this.router.navigate(['/auth/login']);
     });
@@ -118,10 +118,10 @@ export class DashboardComponent implements OnInit {
   }
 
   updateAvatar() {
-    const dialogRef = this.dialog.open(UpdateAvatarDialogComponent, {
-      width: '400px',
-      data: this.myProfile?._avatar,
-    });
+    // const dialogRef = this.dialog.open(UpdateAvatarDialogComponent, {
+    //   width: '400px',
+    //   data: this.myProfile?._avatar,
+    // });
   }
 
   checkTabAndNavigate(activeTab: Tab) {

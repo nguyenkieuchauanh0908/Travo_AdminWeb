@@ -41,9 +41,9 @@ export class PostService {
         catchError(handleError),
         tap(
           (res) => {
-            this.posts = res.data;
-            this.paginationService.pagination = res.data.pagination;
-            this.paginationService.paginationChanged.next(res.pagination);
+            this.posts = res.message;
+            this.paginationService.pagination = res.message.pagination;
+            // this.paginationService.paginationChanged.next(res.pagination);
             this.postListChanged.next([...this.posts]);
           },
           (errMsg) => {
@@ -100,8 +100,8 @@ export class PostService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          if (res.data) {
-            console.log('Created post successfully...', res.data);
+          if (res.message) {
+            console.log('Created post successfully...', res.message);
           }
         })
       );
@@ -154,8 +154,8 @@ export class PostService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          if (res.data) {
-            console.log('Updated post successfully...', res.data);
+          if (res.message) {
+            console.log('Updated post successfully...', res.message);
           }
         })
       );
@@ -267,11 +267,11 @@ export class PostService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          this.searchResult = res.data;
+          this.searchResult = res.message;
           this.searchResultsChanged.next([...this.searchResult]);
-          this.paginationService.pagination = res.pagination;
-          if (res.data) {
-            console.log('Search results: ', res.data);
+          // this.paginationService.pagination = res.pagination;
+          if (res.message) {
+            console.log('Search results: ', res.message);
           }
         })
       );
@@ -303,8 +303,8 @@ export class PostService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          if (res.data) {
-            console.log('Search results: ', res.data);
+          if (res.message) {
+            console.log('Search results: ', res.message);
           }
         })
       );
@@ -328,8 +328,8 @@ export class PostService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          if (res.data) {
-            this.setCurrentTags(res.data);
+          if (res.message) {
+            this.setCurrentTags(res.message);
           }
         })
       );
@@ -343,8 +343,8 @@ export class PostService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          if (res.data) {
-            console.log('Created tag successfully...', res.data);
+          if (res.message) {
+            console.log('Created tag successfully...', res.message);
           }
         })
       );

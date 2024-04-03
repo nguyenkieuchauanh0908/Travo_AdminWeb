@@ -12,13 +12,12 @@
           *ngIf="isAuthenticatedUser"
           class="flex flex-row gap-1 cursor-pointer relative left-8"
         >
-          <img
-            *ngIf="user?._avatar"
+          <!-- <img
             src="{{ user?._avatar }}"
             (click)="updateAvatar()"
             class="w-8 h-8 rounded-full relative top-2"
             alt="Rounded avatar"
-          />
+          /> -->
           <a
             [matMenuTriggerFor]="setting"
             class="relative top-1 text-white-text-color dark:text-white focus:ring-4 focus:ring-gray-300 rounded-lg text-sm font-normal lg:py-2.5 ml-1 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
@@ -34,7 +33,7 @@
           </mat-menu>
         </div>
         <!-- Notifications -->
-        <button
+        <!-- <button
           [matMenuTriggerFor]="menu"
           *ngIf="isAuthenticatedUser"
           class="tooltip-block"
@@ -73,7 +72,7 @@
               >Xem toàn bộ</span
             >
           </p>
-        </mat-menu>
+        </mat-menu> -->
       </div>
     </div>
   </nav>

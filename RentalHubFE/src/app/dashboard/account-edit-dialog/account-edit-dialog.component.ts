@@ -38,13 +38,13 @@ export class AccountEditDialogComponent {
       this.isLoading = true;
       this.accountService.updateProfile(updatedProfile).subscribe(
         (res) => {
-          if (res.data) {
+          if (res.message) {
             this.isLoading = false;
             this.notifierService.notify(
               'success',
               'Cập nhật hồ sơ thành công!'
             );
-            // this.accountService.setCurrentUser(res.data);
+            // this.accountService.setCurrentUser(res.message);
           }
         },
         (errorMsg) => {

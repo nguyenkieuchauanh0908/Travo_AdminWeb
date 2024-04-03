@@ -9,14 +9,14 @@
     class="mat-elevation-z8"
     style="border-radius: 8px !important"
   >
-    <!-- Image Column -->
-    <ng-container matColumnDef="image" style="border-radius: 8px !important">
+    <!-- No Column -->
+    <ng-container matColumnDef="no" style="border-radius: 8px !important">
       <th
         mat-header-cell
         *matHeaderCellDef
         style="border-radius: 8px !important"
       >
-        <p class="text-center" style="border-radius: 8px !important">#</p>
+        <p style="border-radius: 8px !important">#</p>
       </th>
       <td
         mat-cell
@@ -24,63 +24,54 @@
         (click)="seePost(element)"
         class="p-2"
       >
-        <!-- <div class="max-w-16 max-h-16 p-2"> -->
-        <img
-          src="{{ element._images[0] }}"
-          alt="room image"
-          style="width: 24px; height: 18px"
-        />
-        <!-- </div> -->
+        {{ element.no }}
       </td>
     </ng-container>
-    <!-- Title Column -->
-    <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef><p>Tiêu đề</p></th>
+    <!-- Airline Column -->
+    <ng-container matColumnDef="airline">
+      <th mat-header-cell *matHeaderCellDef><p>Hãng bay</p></th>
       <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <p class="line-clamp-3">{{ element._title }}</p>
+        <p class="line-clamp-3">{{ element.airline }}</p>
       </td>
     </ng-container>
 
-    <!-- Desc Column -->
-    <ng-container matColumnDef="desc">
-      <th mat-header-cell *matHeaderCellDef><p>Mô tả</p></th>
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef><p>Chi phí</p></th>
       <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <p class="line-clamp-3">{{ element._desc }}</p>
+        <p class="line-clamp-3">{{ element.price }}$</p>
       </td>
     </ng-container>
 
-    <!-- Author Column -->
-    <ng-container matColumnDef="author">
-      <th mat-header-cell *matHeaderCellDef><p>Tác giả</p></th>
+    <!-- From Place Column -->
+    <ng-container matColumnDef="from_place">
+      <th mat-header-cell *matHeaderCellDef><p>Bay từ</p></th>
       <td mat-cell *matCellDef="let element" (click)="seePost(element)">
         <div class="flex flex-row">
-          <img
+          <!-- <img
             class="w-8 h-8 rounded-full"
             src="{{ element.avatarAuthor }}"
             alt="avatar"
-          />
+          /> -->
           <span class="relative top-1 ml-1 line-clamp-1">
-            {{ element.authorFName }} {{ element.authorLName }}
+            {{ element.from_place }}
           </span>
         </div>
       </td>
     </ng-container>
 
-    <!-- LastUpdate Column -->
-    <ng-container
-      matColumnDef="lastUpdate"
-      style="border-radius: 8px !important"
-    >
+    <!-- To Place Column -->
+    <ng-container matColumnDef="to_place" style="border-radius: 8px !important">
       <th
         mat-header-cell
         *matHeaderCellDef
         style="border-radius: 8px !important"
       >
-        <p style="border-radius: 8px !important">Lần cập nhật cuối</p>
+        <p style="border-radius: 8px !important">Bay đến</p>
       </th>
       <td mat-cell *matCellDef="let element" (click)="seePost(element)">
         <span class="line-clamp-1">
-          {{ element._postingDateLocal }}
+          {{ element.to_place }}
         </span>
       </td>
     </ng-container>
@@ -93,8 +84,11 @@
     ></tr>
   </table>
   <app-pagination
+    [currentPage]="currentPage"
     [totalPages]="totalPages"
-    (toPrevPage)="changeCurrentPage($event)"
-    (toNextPage)="changeCurrentPage($event)"
+    (toPrevPage)="changeCurrentPage($event, false, false)"
+    (toNextPage)="changeCurrentPage($event, false, false)"
+    (toFirstPage)="changeCurrentPage(0, $event, false)"
+    (toLastPage)="changeCurrentPage(0, false, $event)"
   ></app-pagination>
 </div>

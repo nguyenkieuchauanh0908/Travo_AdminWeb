@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
         this.notifierService.notify('success', 'Đăng nhập thành công!');
         this.isLoading = false;
         setTimeout(() => {
-          this.router.navigate(['']);
+          this.router.navigate(['/dashboard/statistics']);
         }, 1000);
       },
       (errorMsg) => {

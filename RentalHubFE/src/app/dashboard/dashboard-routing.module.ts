@@ -17,32 +17,32 @@ const routes: Routes = [
       {
         path: 'manage-places',
         component: ManagePlacesComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
       },
       {
         path: 'manage-hotels',
         component: ManageHotelsComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
       },
       {
         path: 'manage-flights',
         component: ManageFlightsComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
       },
       {
         path: 'manage-coupons',
         component: ManageCouponsComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
       },
       {
         path: 'manage-users',
         component: ManageUsersComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
       },
       {
         path: 'statistics',
         component: StatisticsComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
       },
     ],
   },

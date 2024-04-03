@@ -5,43 +5,15 @@
   transform: translate(-50%, -50%);
 }
 
-.mat-column-desc {
-  word-wrap: break-word !important;
-  white-space: unset !important;
-  flex: 0 0 40% !important;
-  width: 40% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-
-  word-break: break-word;
-
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
-.mat-column-title {
+.mat-column-no
+  .mat-column-airline
+  .mat-column-price
+  .mat-column-from_place
+  .mat-column-to_place {
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 20% !important;
   width: 20% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-
-  word-break: break-word;
-
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
-.mat-column-image {
-  word-wrap: break-word !important;
-  white-space: unset !important;
-  flex: 0 0 5% !important;
-  width: 5% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
 

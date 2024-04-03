@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/dashboard/statistics',
+    redirectTo: '/auth/login',
     pathMatch: 'full',
   },
 ];

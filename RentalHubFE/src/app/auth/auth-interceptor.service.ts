@@ -25,27 +25,28 @@ export class AuthInterceptorService implements HttpInterceptor {
     return this.accountService.getCurrentUser.pipe(
       take(1),
       exhaustMap((user) => {
+        console.log('🚀 ~ AuthInterceptorService ~ exhaustMap ~ user:', user);
+
         if (!user) {
           // Không có thông tin user -> Không có ACToken -> Request gửi đi không có ACToken -> Văng lỗi Unauthorized => Thông báo
           return next.handle(req);
         } else {
-          if (!user.RFToken) {
+          if (!user.getACToken()) {
             console.log('You need to login again!');
             this.router.navigate(['/auth/login']);
           } else {
-            if (user.ACToken && user.RFToken) {
-              console.log('ACToken in interceptor: ', user.ACToken);
+            if (user.getACToken()) {
+              console.log('ACToken in interceptor: ', user.getACToken());
               console.log('On adding ACToken to request header...');
               const headers = new HttpHeaders({
-                Authorization: `Bearer ${user.ACToken}`,
+                Authorization: `Bearer ${user.getACToken()}`,
               });
               const tokenReq = req.clone({ headers: headers });
               return next.handle(tokenReq);
             }
           }
-
-          return next.handle(req);
         }
+        return next.handle(req);
       })
     );
   }

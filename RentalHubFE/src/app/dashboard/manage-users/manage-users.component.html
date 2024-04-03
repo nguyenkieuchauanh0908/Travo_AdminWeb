@@ -4,6 +4,7 @@
   </div>
   <div class="flex justify-between">
     <h2 class="font-extrabold">{{ title }}</h2>
+    <!-- 
     <button
       type="button"
       (click)="addNewEmployee()"
@@ -11,7 +12,7 @@
     >
       <mat-icon>add</mat-icon>
       Thêm nhân viên
-    </button>
+    </button> -->
   </div>
 
   <table
@@ -35,58 +36,72 @@
         (click)="seeEmployeeDetails(element)"
         style="border-radius: 8px !important"
       >
-        <p class="line-clamp-1">{{ element._id }}</p>
+        <p class="line-clamp-1">{{ element.id }}</p>
       </td>
     </ng-container>
 
-    <!-- Image Column -->
-    <ng-container matColumnDef="image" style="border-radius: 8px !important">
+    <!-- Country Column -->
+    <ng-container matColumnDef="country" style="border-radius: 8px !important">
       <th
         mat-header-cell
         *matHeaderCellDef
         style="border-radius: 8px !important"
       >
-        Avatar
+        Quốc gia
       </th>
       <td
         mat-cell
         *matCellDef="let element"
         (click)="seeEmployeeDetails(element)"
       >
-        <img
-          class="w-8 h-8 rounded-full"
-          src="{{ element._avatar }}"
-          alt="image"
-        />
+        {{ element.country }}
+      </td>
+    </ng-container>
+
+    <!-- Phone number Column -->
+    <ng-container matColumnDef="phoneNumber">
+      <th mat-header-cell *matHeaderCellDef>SĐT</th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        (click)="seeEmployeeDetails(element)"
+      >
+        {{ element?.phoneNumber }}
       </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Họ & tên</th>
+      <th mat-header-cell *matHeaderCellDef>Name</th>
       <td
         mat-cell
         *matCellDef="let element"
         (click)="seeEmployeeDetails(element)"
       >
-        {{ element?._fname }} {{ element?._lname }}
+        {{ element?.name }}
       </td>
     </ng-container>
 
     <!-- Email Column -->
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>Email</th>
+    <ng-container matColumnDef="email" style="border-radius: 8px !important">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        style="border-radius: 8px !important"
+      >
+        Email
+      </th>
       <td
         mat-cell
         *matCellDef="let element"
         (click)="seeEmployeeDetails(element)"
       >
-        {{ element?._email }}
+        {{ element?.email }}
       </td>
     </ng-container>
 
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions" style="border-radius: 8px !important">
+    <!-- Ations Column -->
+    <!-- <ng-container matColumnDef="actions" style="border-radius: 8px !important">
       <th
         mat-header-cell
         *matHeaderCellDef
@@ -119,7 +134,7 @@
           </button>
         </div>
       </td>
-    </ng-container>
+    </ng-container> -->
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr
@@ -128,10 +143,14 @@
       class="cursor-pointer"
     ></tr>
   </table>
+  <!-- Pagination -->
   <app-pagination
+    [currentPage]="currentPage"
     [totalPages]="totalPages"
-    (toPrevPage)="changeCurrentPage($event)"
-    (toNextPage)="changeCurrentPage($event)"
+    (toPrevPage)="changeCurrentPage($event, false, false)"
+    (toNextPage)="changeCurrentPage($event, false, false)"
+    (toFirstPage)="changeCurrentPage(0, $event, false)"
+    (toLastPage)="changeCurrentPage(0, false, $event)"
   ></app-pagination>
   <div class="absolute bottom-2 left-4">
     <notifier-container></notifier-container>

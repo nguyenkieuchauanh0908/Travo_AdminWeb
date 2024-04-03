@@ -9,14 +9,14 @@
     class="mat-elevation-z8"
     style="border-radius: 8px !important"
   >
-    <!-- Image Column -->
-    <ng-container matColumnDef="image" style="border-radius: 8px !important">
+    <!-- Id Column -->
+    <ng-container matColumnDef="id" style="border-radius: 8px !important">
       <th
         mat-header-cell
         *matHeaderCellDef
         style="border-radius: 8px !important"
       >
-        <p class="text-center" style="border-radius: 8px !important">#</p>
+        <p style="border-radius: 8px !important">#</p>
       </th>
       <td
         mat-cell
@@ -25,49 +25,67 @@
         class="p-2"
       >
         <!-- <div class="max-w-16 max-h-16 p-2"> -->
-        <img
-          src="{{ element._images[0] }}"
+        <!-- <img
+          src="{{ element.id }}"
           alt="room image"
           style="width: 24px; height: 18px"
-        />
+        /> -->
         <!-- </div> -->
+        {{ element.id }}
       </td>
     </ng-container>
-    <!-- Title Column -->
-    <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef><p>Tiêu đề</p></th>
+    <!-- Endow Column -->
+    <ng-container matColumnDef="endow">
+      <th mat-header-cell *matHeaderCellDef><p>Ảnh</p></th>
       <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <p class="line-clamp-3">{{ element._title }}</p>
-      </td>
-    </ng-container>
-
-    <!-- Desc Column -->
-    <ng-container matColumnDef="desc">
-      <th mat-header-cell *matHeaderCellDef><p>Mô tả</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <p class="line-clamp-3">{{ element._desc }}</p>
-      </td>
-    </ng-container>
-
-    <!-- Author Column -->
-    <ng-container matColumnDef="author">
-      <th mat-header-cell *matHeaderCellDef><p>Tác giả</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <div class="flex flex-row">
+        <div class="max-w-16 max-h-16 p-2">
           <img
+            src="{{ element.endow }}"
+            alt="coupon's img"
+            style="width: 24px; height: 18px"
+          />
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Code Column -->
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef><p>Mã</p></th>
+      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+        <p class="line-clamp-3">{{ element.code }}</p>
+      </td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price" style="border-radius: 8px !important">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        style="border-radius: 8px !important"
+      >
+        <p>Gía trị</p>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        style="border-radius: 8px !important"
+        (click)="seePost(element)"
+      >
+        <div class="flex flex-row">
+          <!-- <img
             class="w-8 h-8 rounded-full"
             src="{{ element.avatarAuthor }}"
             alt="avatar"
-          />
+          /> -->
           <span class="relative top-1 ml-1 line-clamp-1">
-            {{ element.authorFName }} {{ element.authorLName }}
+            {{ element.price * 100 }}%
           </span>
         </div>
       </td>
     </ng-container>
 
     <!-- LastUpdate Column -->
-    <ng-container
+    <!-- <ng-container
       matColumnDef="lastUpdate"
       style="border-radius: 8px !important"
     >
@@ -83,7 +101,7 @@
           {{ element._postingDateLocal }}
         </span>
       </td>
-    </ng-container>
+    </ng-container> -->
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr
@@ -93,8 +111,11 @@
     ></tr>
   </table>
   <app-pagination
+    [currentPage]="currentPage"
     [totalPages]="totalPages"
-    (toPrevPage)="changeCurrentPage($event)"
-    (toNextPage)="changeCurrentPage($event)"
+    (toPrevPage)="changeCurrentPage($event, false, false)"
+    (toNextPage)="changeCurrentPage($event, false, false)"
+    (toFirstPage)="changeCurrentPage(0, $event, false)"
+    (toLastPage)="changeCurrentPage(0, false, $event)"
   ></app-pagination>
 </div>

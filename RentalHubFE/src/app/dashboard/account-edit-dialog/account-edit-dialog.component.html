@@ -18,7 +18,7 @@
             type="text"
             id="fname-input"
             name="fname"
-            [ngModel]="data._fname"
+            [ngModel]="data.name"
             ngModel
             required
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -42,7 +42,7 @@
             >Họ</label
           >
           <input
-            [ngModel]="data._lname"
+            [ngModel]="data.name"
             type="text"
             rows="4"
             id="lname-input"
@@ -70,7 +70,7 @@
             >Email</label
           >
           <input
-            [ngModel]="data._email"
+            [ngModel]="data.email"
             rows="8"
             type="email"
             id="email-input"
@@ -84,7 +84,7 @@
         </div>
 
         <!-- Phone -->
-        <div class="mb-6">
+        <!-- <div class="mb-6">
           <label
             for="base-input"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -108,7 +108,7 @@
               Số điện thoại không được bỏ trống.
             </div>
           </div>
-        </div>
+        </div> -->
       </form>
       <notifier-container></notifier-container>
     </div>
@@ -116,7 +116,6 @@
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Hủy</button>
     <button
-      *ngIf="data._role === 2"
       (click)="saveChanges(editProfileForm.value)"
       class="bg-blue-700 hover:bg-blue-800"
       style="color: white; background-color: #1a56db"

@@ -46,14 +46,14 @@ export class LoginDetailUpdateDialogComponent implements OnInit {
         .updateEmailPassword(form.email, form.pw, form.repw)
         .subscribe(
           (res) => {
-            if (res.data) {
+            if (res.message) {
               this.isLoading = false;
               this.notifierService.notify(
                 'success',
                 'Cập nhật thông tin đăng nhập thành công! Vui lòng đăng nhập lại!'
               );
               this.dialog.closeAll();
-              this.authService.logout(this.accountService.getCurrentUserId());
+              // this.authService.logout(this.accountService.getCurrentUserId());
             }
           },
           (errorMsg) => {

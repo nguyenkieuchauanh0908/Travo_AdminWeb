@@ -68,8 +68,8 @@ export class UpdateAvatarDialogComponent {
           console.log(typeof this.selectedFiles![i]);
           this.accountService.updateAvatar(this.selectedFiles![i]).subscribe(
             (res) => {
-              if (res.data) {
-                console.log(res.data);
+              if (res.message) {
+                console.log(res.message);
                 this.isLoading = false;
                 this.notifierService.notify(
                   'success',

@@ -1,34 +1,25 @@
 export class User {
   constructor(
-    public _id: string,
-    public _fname: string,
-    public _lname: string,
-    public _phone: string,
-    public _dob: Date,
-    public _active: boolean,
-    public _rating: number,
-    public _email: string,
-    public _address: string,
-    public _avatar: string,
-    public _role: number,
-    public _isHost: boolean,
-    private _RFToken: string,
-    public _RFExpiredTime: number,
-    private _ACToken: string,
-    public _ACExpiredTime: number
+    public country: string,
+    public email: string,
+    public name: string,
+    public phoneNumber: string,
+    private accessToken: string,
+    private expiredAccess: number
   ) {}
 
-  get ACToken() {
-    if (!this._ACExpiredTime || Date.now() > this._ACExpiredTime) {
-      return null;
-    }
-    return this._ACToken;
+  getACToken() {
+    return this.accessToken;
   }
 
-  get RFToken() {
-    if (!this._RFToken || Date.now() > this._RFExpiredTime) {
-      return null;
-    }
-    return this._RFToken;
+  getExpiredAccess() {
+    return this.expiredAccess;
   }
+
+  // get RFToken() {
+  //   if (!this._RFToken || Date.now() > this._RFExpiredTime) {
+  //     return null;
+  //   }
+  //   return this._RFToken;
+  // }
 }

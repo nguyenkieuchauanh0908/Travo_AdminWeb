@@ -42,7 +42,7 @@ export class UpdateEmployeeLoginDetailDialogComponent {
         .updateInspectorPass(this.data._id, form.pw, form.repw)
         .subscribe(
           (res) => {
-            if (res.data) {
+            if (res.message) {
               this.isLoading = false;
               this.notifierService.notify(
                 'success',

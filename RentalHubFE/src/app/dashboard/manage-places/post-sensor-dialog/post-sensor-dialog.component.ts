@@ -73,7 +73,7 @@ export class PostSensorDialogComponent {
       this.isLoading = true;
       this.postService.sensorPost(this.data._id, 3).subscribe(
         (res) => {
-          if (res.data) {
+          if (res.message) {
             this.isLoading = false;
             this.denySensorResult.emit(this.data._id);
             this.notifierService.hideAll();
@@ -99,7 +99,7 @@ export class PostSensorDialogComponent {
       this.isLoading = true;
       this.postService.sensorPost(this.data._id, 1).subscribe(
         (res) => {
-          if (res.data) {
+          if (res.message) {
             this.isLoading = false;
             this.sensorResult.emit(this.data._id);
             this.notifierService.hideAll();
@@ -128,7 +128,7 @@ export class PostSensorDialogComponent {
       this.isLoading = true;
       this.postService.removePost(this.data._id).subscribe(
         (res) => {
-          if (res.data) {
+          if (res.message) {
             this.isLoading = false;
             this.sensorResult.emit(this.data._id);
             this.notifierService.hideAll();

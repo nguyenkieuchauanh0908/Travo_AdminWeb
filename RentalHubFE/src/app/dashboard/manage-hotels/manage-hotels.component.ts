@@ -1,19 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NotifierService } from 'angular-notifier';
 import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/accounts/accounts.service';
 import { User } from 'src/app/auth/user.model';
-import { PostService } from 'src/app/posts/post.service';
 import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
-import { Tags } from 'src/app/shared/tags/tag.model';
-import { PostSensorDialogComponent } from '../manage-places/post-sensor-dialog/post-sensor-dialog.component';
 import {
   Pagination,
   PaginationService,
 } from 'src/app/shared/pagination/pagination.service';
 import { HotelsService } from './hotels.service';
 import { Hotel } from './hotel.model';
+import { HotelEditDialogComponent } from './hotel-edit-dialog/hotel-edit-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-manage-hotels',
@@ -32,6 +31,7 @@ export class ManageHotelsComponent {
     'information',
     'location',
     'location_description',
+    'actions',
   ];
   dataSource!: Hotel[];
   myProfile!: User | null;
@@ -41,12 +41,9 @@ export class ManageHotelsComponent {
   currentPage: number = 1;
   pageItemLimit: number = 5;
   myProfileSub = new Subscription();
-  getTagSub = new Subscription();
-  sourceTags: Set<Tags> = new Set();
 
   constructor(
     private accountService: AccountService,
-    private postService: PostService,
     private hotelsService: HotelsService,
     public dialog: MatDialog,
     private notifierService: NotifierService,
@@ -82,29 +79,78 @@ export class ManageHotelsComponent {
     );
   }
 
-  seePost(post: any) {
-    // console.log('Seeing post detail....');
-    // const dialogRef = this.dialog.open(PostSensorDialogComponent, {
-    //   width: '1000px',
-    //   data: post,
-    // });
-    // let sub = dialogRef.componentInstance.sensorResult.subscribe((postId) => {
-    //   if (this.dataSource) {
-    //     this.dataSource = this.dataSource.filter(
-    //       (post: PostItem) => post._id !== postId
-    //     );
-    //   }
-    // });
-    // sub = dialogRef.componentInstance.denySensorResult.subscribe((postId) => {
-    //   if (this.dataSource) {
-    //     this.dataSource = this.dataSource.filter(
-    //       (post: PostItem) => post._id !== postId
-    //     );
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   sub.unsubscribe();
-    // });
+  addNewHotel() {
+    console.log('Adding new hotel..');
+    const dialogRef = this.dialog.open(HotelEditDialogComponent, {
+      width: '1000px',
+      data: null,
+    });
+    let sub = dialogRef.componentInstance.addSucess.subscribe(() => {
+      this.hotelsService.getAllHotels(this.currentPage, 5).subscribe(
+        (res) => {
+          if (res) {
+            this.isLoading = false;
+          } else {
+            this.dataSource = [];
+          }
+        },
+        (err) => {
+          this.notifierService.notify('error', err);
+        }
+      );
+      this.hotelsService.getCurrentHotelsList.subscribe((hotels) => {
+        if (hotels) {
+          this.dataSource = [...hotels];
+        }
+      });
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      sub.unsubscribe();
+    });
+  }
+
+  deleteHotel(hotelId: string) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: 'Bạn có chắc muốn xóa khách sạn này',
+    });
+    let sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
+      this.hotelsService.deleteHotel(hotelId).subscribe((res) => {
+        if (res.message) {
+          this.dataSource = this.dataSource.filter(
+            (hotel) => hotel.id !== hotelId
+          );
+          this.notifierService.notify('success', 'Xóa thành công!');
+        }
+      });
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      sub.unsubscribe();
+    });
+  }
+
+  seeDetail(hotel: any) {
+    console.log('Seeing hotel detail....');
+    const dialogRef = this.dialog.open(HotelEditDialogComponent, {
+      width: '1000px',
+      data: hotel,
+    });
+    let sub = dialogRef.componentInstance.updateSuccess.subscribe(
+      (updatedHotel) => {
+        if (this.dataSource) {
+          let updatedDtSource: Hotel[] = this.dataSource.map((hotel: Hotel) => {
+            if (hotel.id === updatedHotel.id) {
+              hotel = updatedHotel;
+            }
+            return hotel;
+          });
+          this.dataSource = [...updatedDtSource];
+        }
+      }
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      sub.unsubscribe();
+    });
   }
 
   changeCurrentPage(

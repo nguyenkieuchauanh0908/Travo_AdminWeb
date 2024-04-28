@@ -14,6 +14,8 @@ import {
 } from 'src/app/shared/pagination/pagination.service';
 import { FlightsService } from './flights.service';
 import { Flight } from './flight.model';
+import { FlightEditDialogComponent } from './flight-edit-dialog/flight-edit-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-manage-flights',
@@ -29,6 +31,7 @@ export class ManageFlightsComponent {
     'price',
     'from_place',
     'to_place',
+    'actions',
   ];
   dataSource!: Flight[];
   myProfile!: User | null;
@@ -79,29 +82,82 @@ export class ManageFlightsComponent {
     );
   }
 
-  seePost(post: any) {
-    // console.log('Seeing post detail....');
-    // const dialogRef = this.dialog.open(PostSensorDialogComponent, {
-    //   width: '1000px',
-    //   data: post,
-    // });
-    // let sub = dialogRef.componentInstance.sensorResult.subscribe((postId) => {
-    //   if (this.dataSource) {
-    //     this.dataSource = this.dataSource.filter(
-    //       (post: PostItem) => post._id !== postId
-    //     );
-    //   }
-    // });
-    // sub = dialogRef.componentInstance.denySensorResult.subscribe((postId) => {
-    //   if (this.dataSource) {
-    //     this.dataSource = this.dataSource.filter(
-    //       (post: PostItem) => post._id !== postId
-    //     );
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   sub.unsubscribe();
-    // });
+  addNewFlight() {
+    console.log('Adding new flight..');
+    const dialogRef = this.dialog.open(FlightEditDialogComponent, {
+      width: '1000px',
+      data: 'Thêm chuyến bay',
+    });
+    let sub = dialogRef.componentInstance.addSucess.subscribe(() => {
+      this.flightsService.getAllFlights(this.currentPage, 5).subscribe(
+        (res) => {
+          if (res) {
+            this.isLoading = false;
+          } else {
+            this.dataSource = [];
+          }
+        },
+        (err) => {
+          this.notifierService.notify('error', err);
+        }
+      );
+      this.flightsService.getCurrentFlightsList.subscribe((hotels) => {
+        if (hotels) {
+          this.dataSource = [...hotels];
+        }
+      });
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      sub.unsubscribe();
+    });
+  }
+
+  seeDetail(flight: Flight) {
+    console.log('Seeing flight detail....');
+    const dialogRef = this.dialog.open(FlightEditDialogComponent, {
+      width: '1000px',
+      data: flight,
+    });
+
+    let sub = dialogRef.componentInstance.updateSuccess.subscribe(
+      (updatedFlight) => {
+        if (this.dataSource) {
+          let updatedDtSource: Flight[] = this.dataSource.map(
+            (flight: Flight) => {
+              if (flight.id === updatedFlight.id) {
+                flight = updatedFlight;
+              }
+              return flight;
+            }
+          );
+          this.dataSource = [...updatedDtSource];
+        }
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      sub.unsubscribe();
+    });
+  }
+
+  deleteFlight(flightId: string) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: 'Bạn có chắc muốn xóa chuyến bay này',
+    });
+    let sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
+      this.flightsService.removeFlight(flightId).subscribe((res) => {
+        if (res.message) {
+          this.dataSource = this.dataSource.filter(
+            (flight) => flight.id !== flightId
+          );
+          this.notifierService.notify('success', 'Xóa thành công!');
+        }
+      });
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      sub.unsubscribe();
+    });
   }
 
   changeCurrentPage(

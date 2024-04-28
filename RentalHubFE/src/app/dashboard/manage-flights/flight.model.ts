@@ -4,15 +4,10 @@ export interface Flight {
   price: number;
   to_place: string;
   airline: string;
-  departure_time: {
-    _seconds: number;
-    _nanoseconds: number;
-  };
+  departure_time: string;
   from_place: string;
-  arrive_time: {
-    _seconds: number;
-    _nanoseconds: number;
-  };
+  arrive_time: string;
+  facilities: [string];
   seat: [SeatMap];
 }
 

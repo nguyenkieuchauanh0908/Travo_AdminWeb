@@ -40,4 +40,50 @@ export class CouponsService {
         })
       );
   }
+
+  getCouponById(promoId: string) {
+    let queryParams = new HttpParams().append('promoId', promoId);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'promo/get-promo-by-id', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
+  updateCoupon(form: any, image: File | string) {
+    let body = new FormData();
+    body.append('id', form.idInputControl);
+    // body.append('endow', form.endowInputControl);
+    body.append('code', form.codeInputControl);
+    body.append('price', (form.priceInputControl / 100).toString());
+    if (typeof image !== 'string') {
+      body.append('image', image);
+    }
+    return this.http
+      .patch<resDataDTO>(environment.baseUrl + 'promo/update-promo', body)
+      .pipe(catchError(handleError));
+  }
+
+  addNewCoupon(form: any, image: File | string) {
+    let body = new FormData();
+    body.append('id', form.idInputControl);
+    // body.append('endow', form.endowInputControl);
+    body.append('code', form.codeInputControl);
+    body.append('price', (form.priceInputControl / 100).toString());
+    if (typeof image !== 'string') {
+      body.append('image', image);
+    }
+    return this.http
+      .post<resDataDTO>(environment.baseUrl + 'promo/create-promo', body)
+      .pipe(catchError(handleError));
+  }
+
+  deleteCouponb(promoId: string) {
+    let httpParams = new HttpParams().append('promoId', promoId);
+    return this.http
+      .delete<resDataDTO>(environment.baseUrl + 'promo/remove-promo', {
+        params: httpParams,
+      })
+      .pipe(catchError(handleError));
+  }
 }

@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
       title: 'Thống kê',
       icon: 'poll',
       link: 'statistics',
-      active: true,
+      active: false,
       subTabs: false,
     },
     {
@@ -53,6 +53,13 @@ export class DashboardComponent implements OnInit {
       title: 'Quản lý khách sạn',
       icon: 'hotel',
       link: 'manage-hotels',
+      active: false,
+      subTabs: false,
+    },
+    {
+      title: 'Quản lý phòng',
+      icon: 'meeting_room',
+      link: 'manage-rooms',
       active: false,
       subTabs: false,
     },

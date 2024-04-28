@@ -1,0 +1,194 @@
+<h2 mat-dialog-title>{{ this.titles }}</h2>
+<mat-dialog-content class="mat-typography">
+  <div *ngIf="isLoading" class="spinner__loading">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+
+  <div class="bg-white-background rounded-lg xs:p-2 md:p-6">
+    <form [formGroup]="roomEditForm" (ngSubmit)="onSubmit()">
+      <!-- HotelId -->
+      <mat-form-field class="w-full">
+        <mat-label>ID khách sạn</mat-label>
+        <input
+          id="name-input"
+          aria-label="Tên địa điểm"
+          matInput
+          formControlName="hotelIdInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.roomEditForm.controls.hotelIdInputControl.hasError('required')
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+      <!-- Name -->
+      <mat-form-field class="w-full">
+        <mat-label>Loại phòng</mat-label>
+        <input
+          id="name-input"
+          aria-label="Loại phòng"
+          matInput
+          formControlName="nameInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.roomEditForm.controls.nameInputControl.hasError('required')
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- maxGuests  -->
+      <mat-form-field class="w-full h-96">
+        <mat-label>Khách/phòng</mat-label>
+        <input
+          aria-label="Khách/phòng"
+          matInput
+          formControlName="maxGuestInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.roomEditForm.controls.maxGuestInputControl.hasError('required')
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- total -->
+      <mat-form-field class="w-full">
+        <mat-label>Số lượng phòng</mat-label>
+        <input
+          aria-label="Số lượng phòng"
+          matInput
+          formControlName="totalInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.roomEditForm.controls.totalInputControl.hasError('required')
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- price -->
+      <mat-form-field class="w-full">
+        <mat-label>Giá/đêm</mat-label>
+        <input
+          aria-label="Gía/đêm"
+          matInput
+          formControlName="priceInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.roomEditForm.controls.priceInputControl.hasError('required')
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- services -->
+      <mat-form-field class="w-full">
+        <mat-label>Dịch vụ</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Dịch vụ">
+          <mat-chip-row
+            *ngFor="let service of services"
+            (removed)="remove(service)"
+          >
+            {{ service }}
+            <button matChipRemove [attr.aria-label]="'remove ' + service">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input
+          #servicesInput
+          [formControl]="this.roomEditForm.controls.serviceInputControl"
+          [matChipInputFor]="chipGrid"
+          [matAutocomplete]="auto"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="add($event)"
+        />
+
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="selected($event)"
+        >
+          <mat-option
+            *ngFor="let service of filteredServices | async"
+            [value]="service"
+          >
+            {{ service }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- Images -->
+      <div class="flex flex-col items-center justify-start w-full">
+        <label
+          for="dropzoneNewRoomImage"
+          class="flex flex-row items-start justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        >
+          <div class="flex flex-row items-center justify-center">
+            <svg
+              class="w-8 h-12 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+
+            <p class="relative top-1 text-xs text-gray-500 dark:text-gray-400">
+              Ảnh phòng
+            </p>
+          </div>
+          <input
+            id="dropzoneNewRoomImage"
+            #dropzoneNewRoomImage
+            type="file"
+            class="hidden"
+            (change)="selectFiles($event)"
+          />
+        </label>
+        <mat-error *ngIf="!this.previewImage">
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+        <div class="flex justify-center p-4">
+          <img
+            (click)="dropzoneNewRoomImage.click()"
+            [src]="previewImage"
+            class="w-full rounded-md cursor-pointer"
+          />
+        </div>
+      </div>
+
+      <!-- Save btn -->
+      <div class="mt-6 flex items-center justify-end gap-x-6"></div>
+    </form>
+    <notifier-container></notifier-container>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Hủy</button>
+  <button
+    type="button"
+    (click)="onSubmit()"
+    [disabled]="roomEditForm.invalid"
+    class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+  >
+    Lưu
+  </button>
+</mat-dialog-actions>

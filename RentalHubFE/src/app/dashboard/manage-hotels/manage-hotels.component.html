@@ -2,7 +2,17 @@
   <div *ngIf="isLoading" class="spinner__loading text-center">
     <mat-spinner diameter="30"></mat-spinner>
   </div>
-  <h2 class="font-extrabold">{{ title }}</h2>
+  <div class="flex justify-between">
+    <h2 class="font-extrabold">{{ this.title }}</h2>
+    <button
+      type="button"
+      (click)="addNewHotel()"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-4"
+    >
+      <mat-icon>add</mat-icon>
+      Thêm
+    </button>
+  </div>
   <table
     mat-table
     [dataSource]="dataSource"
@@ -21,7 +31,7 @@
       <td
         mat-cell
         *matCellDef="let element"
-        (click)="seePost(element)"
+        (click)="seeDetail(element)"
         class="p-2"
       >
         <!-- <div class="max-w-16 max-h-16 p-2"> -->
@@ -36,7 +46,7 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef><p>Tên khách sạn</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
         <p class="line-clamp-3">{{ element.name }}</p>
       </td>
     </ng-container>
@@ -44,7 +54,7 @@
     <!-- Price Column -->
     <ng-container matColumnDef="price">
       <th mat-header-cell *matHeaderCellDef><p>Chi phí</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
         <div class="flex flex-row">
           <span class="relative top-1 ml-1 line-clamp-1">
             {{ element.price }}
@@ -56,7 +66,7 @@
     <!-- Total Review Column -->
     <ng-container matColumnDef="total_review">
       <th mat-header-cell *matHeaderCellDef><p>Tổng review</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
         <div class="flex flex-row">
           <span class="relative top-1 ml-1 line-clamp-1">
             {{ element.total_review }}
@@ -68,7 +78,7 @@
     <!-- Rating Column -->
     <ng-container matColumnDef="rating">
       <th mat-header-cell *matHeaderCellDef><p>Điểm đánh giá</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
         <div class="flex flex-row">
           <span class="relative top-1 ml-1 line-clamp-1">
             {{ element.rating }}
@@ -80,13 +90,8 @@
     <!-- Information Column -->
     <ng-container matColumnDef="information">
       <th mat-header-cell *matHeaderCellDef><p>Thông tin</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
         <div class="flex flex-row">
-          <!-- <img
-            class="w-8 h-8 rounded-full"
-            src="{{ element.avatarAuthor }}"
-            alt="avatar"
-          /> -->
           <span class="relative top-1 ml-1 line-clamp-1">
             {{ element.information }}
           </span>
@@ -97,13 +102,8 @@
     <!-- Location Column -->
     <ng-container matColumnDef="location">
       <th mat-header-cell *matHeaderCellDef><p>Địa điểm</p></th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
         <div class="flex flex-row">
-          <!-- <img
-            class="w-8 h-8 rounded-full"
-            src="{{ element.avatarAuthor }}"
-            alt="avatar"
-          /> -->
           <span class="relative top-1 ml-1 line-clamp-1">
             {{ element.location }}
           </span>
@@ -112,21 +112,48 @@
     </ng-container>
 
     <!-- Location Description Column -->
-    <ng-container
-      matColumnDef="location_description"
-      style="border-radius: 8px !important"
-    >
+    <ng-container matColumnDef="location_description">
+      <th mat-header-cell *matHeaderCellDef>
+        <p>Mô tả</p>
+      </th>
+      <td mat-cell *matCellDef="let element" (click)="seeDetail(element)">
+        <span class="line-clamp-1">
+          {{ element.location_description }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions" style="border-radius: 8px !important">
       <th
         mat-header-cell
         *matHeaderCellDef
         style="border-radius: 8px !important"
       >
-        <p style="border-radius: 8px !important">Mô tả</p>
+        Khác
       </th>
-      <td mat-cell *matCellDef="let element" (click)="seePost(element)">
-        <span class="line-clamp-1">
-          {{ element.location_description }}
-        </span>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon
+          (click)="this.deleteHotel(element.id)"
+          matRipple
+          [matRippleCentered]="true"
+          [matRippleRadius]="20"
+          [matRippleUnbounded]="true"
+          color="primary"
+          class="actions-delete-color mr-1"
+          >delete</mat-icon
+        >
+
+        <mat-icon
+          (click)="seeDetail(element)"
+          matRipple
+          [matRippleCentered]="true"
+          [matRippleRadius]="20"
+          [matRippleUnbounded]="true"
+          color="primary"
+          class="actions-edit-color"
+          >edit</mat-icon
+        >
       </td>
     </ng-container>
 

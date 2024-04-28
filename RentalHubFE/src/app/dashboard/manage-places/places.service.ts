@@ -34,11 +34,55 @@ export class PlacesService {
       .pipe(
         catchError(handleError),
         tap((res) => {
-          console.log(res.message);
+          // console.log(res.message);
           this.setCurrentPlaces(res.message);
           this.paginationService.pagination = res.pagination;
           this.paginationService.paginationChanged.next(res.pagination);
         })
       );
+  }
+
+  getPlaceById(placeId: string) {
+    let queryParams = new HttpParams().append('placeId', placeId);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + '/place/get-place-by-id', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
+  createPlace(form: any, image: File | string) {
+    let body = new FormData();
+    body.append('name', form.nameInputControl);
+    body.append('desc', form.descInputControl);
+    body.append('rating', new Number(5).toString());
+    if (typeof image !== 'string') {
+      body.append('image', image);
+    }
+    return this.http
+      .post<resDataDTO>(environment.baseUrl + 'place/create-place', body)
+      .pipe(catchError(handleError));
+  }
+  updatePlace(form: any, image: File | string) {
+    let body = new FormData();
+    body.append('id', form.idInputControl);
+    body.append('name', form.nameInputControl);
+    body.append('desc', form.descInputControl);
+    body.append('rating', form.ratingInputControl);
+    if (typeof image !== 'string') {
+      body.append('image', image);
+    }
+    return this.http
+      .patch<resDataDTO>(environment.baseUrl + 'promo/update-promo', body)
+      .pipe(catchError(handleError));
+  }
+
+  deletePlace(placeId: string) {
+    let queryParams = new HttpParams().append('placeId', placeId);
+    return this.http
+      .delete<resDataDTO>(environment.baseUrl + 'place/remove-place', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
   }
 }

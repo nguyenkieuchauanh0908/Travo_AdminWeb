@@ -26,3 +26,10 @@
   border-right-width: 0px;
   border-right-style: none !important;
 }
+:host .actions-delete-color {
+  color: #f44336 !important;
+}
+
+:host .actions-edit-color {
+  color: #007c01 !important;
+}

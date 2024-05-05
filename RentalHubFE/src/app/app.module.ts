@@ -14,6 +14,10 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { AuthGuard } from './auth/auth.guard';
 import { NotifierModule } from 'angular-notifier';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {
+  NGX_MAT_DATE_FORMATS,
+  NgxMatNativeDateModule,
+} from '@angular-material-components/datetime-picker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,6 +36,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
       useClass: AuthInterceptorService,
       multi: true,
     },
+
     // AuthGuard,
   ],
   bootstrap: [AppComponent],

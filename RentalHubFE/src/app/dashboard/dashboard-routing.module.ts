@@ -8,6 +8,7 @@ import { ManageCouponsComponent } from './manage-coupons/manage-coupons.componen
 import { StatisticsComponent } from './statistics/statistics.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { ManagePlacesComponent } from './manage-places/manage-places.component';
+import { ManageRoomsComponent } from './manage-rooms/manage-rooms.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,11 @@ const routes: Routes = [
       {
         path: 'manage-users',
         component: ManageUsersComponent,
+        // canActivate: [AuthGuard],
+      },
+      {
+        path: 'manage-rooms',
+        component: ManageRoomsComponent,
         // canActivate: [AuthGuard],
       },
       {

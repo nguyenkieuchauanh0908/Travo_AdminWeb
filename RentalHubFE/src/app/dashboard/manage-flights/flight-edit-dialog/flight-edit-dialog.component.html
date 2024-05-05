@@ -1,0 +1,215 @@
+<h2 mat-dialog-title>{{ this.title }}</h2>
+<mat-dialog-content class="mat-typography">
+  <div *ngIf="isLoading" class="spinner__loading text-center">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+
+  <div class="bg-white-background rounded-lg xs:p-2 md:p-6">
+    <form [formGroup]="flightEditForm" (ngSubmit)="saveChanges()">
+      <!-- no -->
+      <mat-form-field class="w-full">
+        <mat-label>No</mat-label>
+        <input
+          id="no-input"
+          aria-label="No"
+          matInput
+          formControlName="noInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.flightEditForm.controls.noInputControl.hasError('required')
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- priceInputControl  -->
+      <mat-form-field class="w-full">
+        <mat-label>Giá ($)</mat-label>
+        <input
+          aria-label="Giá ($)"
+          matInput
+          formControlName="priceInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.flightEditForm.controls.priceInputControl.hasError('required')
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- from -->
+      <mat-form-field class="w-full">
+        <mat-label>From</mat-label>
+        <input
+          aria-label="From"
+          matInput
+          formControlName="fromPlaceInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.flightEditForm.controls.fromPlaceInputControl.hasError(
+              'required'
+            )
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- to -->
+      <mat-form-field class="w-full">
+        <mat-label>To</mat-label>
+        <input aria-label="To" matInput formControlName="toPlaceInputControl" />
+        <mat-error
+          *ngIf="
+            this.flightEditForm.controls.toPlaceInputControl.hasError(
+              'required'
+            )
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- airline -->
+      <mat-form-field class="w-full">
+        <mat-label>Airline</mat-label>
+        <input
+          aria-label="Airline"
+          matInput
+          formControlName="airlineInputControl"
+        />
+        <mat-error
+          *ngIf="
+            this.flightEditForm.controls.airlineInputControl.hasError(
+              'required'
+            )
+          "
+        >
+          Thông tin <strong>bắt buộc</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <!-- facilities -->
+      <mat-form-field class="w-full">
+        <mat-label>Dịch vụ</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Dịch vụ">
+          <mat-chip-row
+            *ngFor="let facility of this.flightFacilities"
+            (removed)="remove(facility)"
+          >
+            {{ facility }}
+            <button matChipRemove [attr.aria-label]="'remove ' + facility">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input
+          #servicesInput
+          [formControl]="this.flightEditForm.controls.facilitiesInputControl"
+          [matChipInputFor]="chipGrid"
+          [matAutocomplete]="auto"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="add($event)"
+        />
+
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="selected($event)"
+        >
+          <mat-option
+            *ngFor="let facility of filteredFacilities | async"
+            [value]="facility"
+          >
+            {{ facility }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- depature time -->
+      <mat-form-field class="w-full">
+        <mat-label>Giờ khởi hành</mat-label>
+        <input
+          aria-label="Giờ khởi hành"
+          matInput
+          [ngxMatDatetimePicker]="depature"
+          placeholder="Choose a date"
+          [formControl]="this.flightEditForm.controls.departureTimeInputControl"
+          [min]="minDate"
+          [max]="maxDate"
+        />
+        <mat-datepicker-toggle matSuffix [for]="$any(depature)">
+        </mat-datepicker-toggle>
+
+        <ngx-mat-datetime-picker
+          #depature
+          [showSpinners]="showSpinners"
+          [showSeconds]="showSeconds"
+          [stepHour]="stepHour"
+          [stepMinute]="stepMinute"
+          [stepSecond]="stepSecond"
+          [touchUi]="touchUi"
+          [color]="'primary'"
+          [enableMeridian]="enableMeridian"
+        >
+          <ngx-mat-datepicker-actions>
+            <button mat-button ngxMatDatepickerCancel>Hủy</button>
+            <button mat-raised-button color="primary" ngxMatDatepickerApply>
+              Áp dụng
+            </button>
+          </ngx-mat-datepicker-actions>
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
+
+      <!-- arrival time -->
+      <mat-form-field class="w-full">
+        <mat-label>Giờ hạ cánh</mat-label>
+        <input
+          aria-label="Giờ hạ cánh"
+          matInput
+          [ngxMatDatetimePicker]="arrival"
+          placeholder="Choose a date"
+          [formControl]="this.flightEditForm.controls.arriveTimeInputControl"
+          [min]="minDate"
+          [max]="maxDate"
+        />
+        <mat-datepicker-toggle matSuffix [for]="$any(arrival)">
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker
+          #arrival
+          [showSpinners]="showSpinners"
+          [showSeconds]="showSeconds"
+          [stepHour]="stepHour"
+          [stepMinute]="stepMinute"
+          [stepSecond]="stepSecond"
+          [touchUi]="touchUi"
+          [color]="'primary'"
+          [enableMeridian]="enableMeridian"
+        >
+          <ngx-mat-datepicker-actions>
+            <button mat-button ngxMatDatepickerCancel>Hủy</button>
+            <button mat-raised-button color="primary" ngxMatDatepickerApply>
+              Áp dụng
+            </button>
+          </ngx-mat-datepicker-actions>
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
+    </form>
+    <notifier-container></notifier-container>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Hủy</button>
+
+  <button
+    (click)="saveChanges()"
+    type="button"
+    class="mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+  >
+    Lưu
+  </button>
+</mat-dialog-actions>

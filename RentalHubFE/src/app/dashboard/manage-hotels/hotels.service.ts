@@ -40,4 +40,60 @@ export class HotelsService {
         })
       );
   }
+
+  getHotelById(hotelId: string) {
+    let queryParams = new HttpParams().append('hotelId', hotelId);
+    return this.http
+      .get<resDataDTO>(environment.baseUrl + 'hotel/get-hotel-by-id', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
+
+  updateHotelById(id: string, form: any, image: File | string) {
+    let body = new FormData();
+    body.append('id', id);
+    body.append('information', form.informationInputControl);
+    body.append('location', form.locationInputControl);
+    body.append('location_description', form.locationInputControl);
+    body.append('max_guest', form.maxGuestsInputControl);
+    body.append('max_room', form.maxRoomsInputControl);
+    body.append('name', form.nameInputControl);
+    body.append('price', form.priceInputControl);
+    body.append('type_price', form.typeInputControl);
+    if (typeof image !== 'string') {
+      body.append('image', image);
+    }
+    return this.http
+      .patch<resDataDTO>(environment.baseUrl + 'hotel/update-hotel', body)
+      .pipe(catchError(handleError));
+  }
+
+  addNewHotel(form: any, image: File | string) {
+    let body = new FormData();
+    body.append('information', form.informationInputControl);
+    body.append('location', form.locationInputControl);
+    body.append('location_description', form.locationInputControl);
+    body.append('max_guest', form.maxGuestsInputControl);
+    body.append('max_room', form.maxRoomsInputControl);
+    body.append('name', form.nameInputControl);
+    body.append('price', form.priceInputControl);
+    body.append('rating', '5');
+    body.append('total_review', '0');
+    body.append('type_price', form.typeInputControl);
+    body.append('image', image);
+
+    return this.http
+      .post<resDataDTO>(environment.baseUrl + 'hotel/create-hotel', body)
+      .pipe(catchError(handleError));
+  }
+
+  deleteHotel(hotelId: string) {
+    let queryParams = new HttpParams().append('hotelId', hotelId);
+    return this.http
+      .delete<resDataDTO>(environment.baseUrl + 'hotel/delete-hotel', {
+        params: queryParams,
+      })
+      .pipe(catchError(handleError));
+  }
 }

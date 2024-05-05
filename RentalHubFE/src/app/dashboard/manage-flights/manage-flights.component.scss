@@ -29,3 +29,11 @@ table tr:last-child td /*To remove the last border*/ {
   border-bottom: 0 solid;
   border-radius: 8px !important;
 }
+
+.actions-delete-color {
+  color: #f44336 !important;
+}
+
+.actions-edit-color {
+  color: #007c01 !important;
+}

@@ -1,6 +1,6 @@
 export interface Coupon {
-  id: string;
-  endow: string;
-  code: string;
+  id: String;
+  endow: String;
+  code: String;
   price: Number;
 }

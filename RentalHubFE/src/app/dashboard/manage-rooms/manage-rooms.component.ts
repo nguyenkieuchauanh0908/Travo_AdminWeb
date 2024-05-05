@@ -1,32 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NotifierService } from 'angular-notifier';
 import { Subscription } from 'rxjs';
-import { AccountService } from 'src/app/accounts/accounts.service';
-import { PostEditDialogComponent } from 'src/app/accounts/posting-history/post-edit-dialog/post-edit-dialog.component';
 import { User } from 'src/app/auth/user.model';
-import { PostService } from 'src/app/posts/post.service';
 import { PostItem } from 'src/app/posts/posts-list/post-item/post-item.model';
-import { Tags } from 'src/app/shared/tags/tag.model';
-import { PostSensorDialogComponent } from './post-sensor-dialog/post-sensor-dialog.component';
-import {
-  Pagination,
-  PaginationService,
-} from 'src/app/shared/pagination/pagination.service';
-import { PlacesService } from './places.service';
-import { Place } from './place.model';
-import { PlaceEditDialogComponent } from './place-edit-dialog/place-edit-dialog.component';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import {
+  PaginationService,
+  Pagination,
+} from 'src/app/shared/pagination/pagination.service';
+import { Tags } from 'src/app/shared/tags/tag.model';
+import { PlacesService } from '../manage-places/places.service';
+import { RoomsService } from './rooms.service';
+import { Room } from './room.model';
+import { RoomEditDialogComponent } from './room-edit-dialog/room-edit-dialog.component';
+
 @Component({
-  selector: 'app-manage-places',
-  templateUrl: './manage-places.component.html',
-  styleUrls: ['./manage-places.component.scss'],
+  selector: 'app-manage-rooms',
+  templateUrl: './manage-rooms.component.html',
+  styleUrls: ['./manage-rooms.component.scss'],
 })
-export class ManagePlacesComponent implements OnInit {
+export class ManageRoomsComponent {
   isLoading = false;
-  displayedColumns: string[] = ['image', 'name', 'rating', 'desc', 'actions'];
-  title = 'Quản lý địa điểm';
-  dataSource!: Place[];
+  displayedColumns: string[] = [
+    'image',
+    'hotel',
+    'price',
+    'name',
+    'max_guests',
+    'total',
+    'actions',
+  ];
+  title = 'Quản lý phòng khách sạn';
+  dataSource!: Room[];
   myProfile!: User | null;
   currentUid!: string | null;
   historyPosts: PostItem[] = new Array<PostItem>();
@@ -38,6 +44,7 @@ export class ManagePlacesComponent implements OnInit {
   totalPages: number = 1;
 
   constructor(
+    private roomsService: RoomsService,
     private placeService: PlacesService,
     private notifierService: NotifierService,
     public dialog: MatDialog,
@@ -47,7 +54,7 @@ export class ManagePlacesComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     this.paginationService.currentPage = 1;
-    this.placeService.getAllPlaces(1, this.pageItemLimit).subscribe(
+    this.roomsService.getAllRooms(1, this.pageItemLimit).subscribe(
       (res) => {
         if (res.message) {
           this.isLoading = false;
@@ -57,9 +64,9 @@ export class ManagePlacesComponent implements OnInit {
         this.notifierService.notify('error', err);
       }
     );
-    this.placeService.getCurrentPlacesList.subscribe((places) => {
-      if (places) {
-        this.dataSource = places;
+    this.roomsService.getCurrentRoomsList.subscribe((rooms) => {
+      if (rooms) {
+        this.dataSource = rooms;
       }
     });
     this.paginationService.paginationChanged.subscribe(
@@ -69,20 +76,24 @@ export class ManagePlacesComponent implements OnInit {
     );
   }
 
-  seeDetail(place: any) {
-    console.log('Seeing Place detail....');
-    const dialogRef = this.dialog.open(PlaceEditDialogComponent, {
+  seeDetail(room: any) {
+    console.log('Seeing Room detail....');
+    const dialogRef = this.dialog.open(RoomEditDialogComponent, {
       width: '1000px',
-      data: place,
+      data: room,
     });
     let sub = dialogRef.componentInstance.updateSuccess.subscribe(
-      (updatedPlace) => {
+      (updatedRoom) => {
         if (this.dataSource) {
-          let updatedDtSource: Place[] = this.dataSource.map((place: Place) => {
-            if (place.id === updatedPlace.id) {
-              place = updatedPlace;
+          let updatedDtSource: Room[] = this.dataSource.map((room: Room) => {
+            if (room.id === updatedRoom.id) {
+              room = updatedRoom;
+              console.log(
+                '🚀 ~ ManageRoomsComponent ~ letupdatedDtSource:Room[]=this.dataSource.map ~ room:',
+                room
+              );
             }
-            return place;
+            return room;
           });
           this.dataSource = [...updatedDtSource];
         }
@@ -93,46 +104,16 @@ export class ManagePlacesComponent implements OnInit {
     });
   }
 
-  addNewPlace() {
-    console.log('Seeing Place detail....');
-    const dialogRef = this.dialog.open(PlaceEditDialogComponent, {
-      width: '1000px',
-      data: null,
-    });
-    let sub = dialogRef.componentInstance.addSucess.subscribe(() => {
-      this.placeService.getAllPlaces(this.currentPage, 5).subscribe(
-        (res) => {
-          if (res) {
-            this.isLoading = false;
-          } else {
-            this.dataSource = [];
-          }
-        },
-        (err) => {
-          this.notifierService.notify('error', err);
-        }
-      );
-      this.placeService.getCurrentPlacesList.subscribe((places) => {
-        if (places) {
-          this.dataSource = [...places];
-        }
-      });
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      sub.unsubscribe();
-    });
-  }
-
-  deletePlace(placeId: string) {
+  delete(roomId: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
-      data: 'Bạn có chắc muốn xóa địa điểm này',
+      data: 'Bạn có chắc muốn xóa ?',
     });
     let sub = dialogRef.componentInstance.confirmYes.subscribe(() => {
-      this.placeService.deletePlace(placeId).subscribe((res) => {
+      this.roomsService.deleteRoom(roomId).subscribe((res) => {
         if (res.message) {
           this.dataSource = this.dataSource.filter(
-            (Place) => Place.id !== placeId
+            (room) => room.id !== roomId
           );
           this.notifierService.notify('success', 'Xóa thành công!');
         }
@@ -160,7 +141,7 @@ export class ManagePlacesComponent implements OnInit {
     } else if (toLastPage) {
       this.currentPage = this.totalPages;
     }
-    this.placeService.getAllPlaces(this.currentPage, 5).subscribe(
+    this.roomsService.getAllRooms(this.currentPage, 5).subscribe(
       (res) => {
         if (res) {
           this.isLoading = false;
@@ -172,9 +153,9 @@ export class ManagePlacesComponent implements OnInit {
         this.notifierService.notify('error', err);
       }
     );
-    this.placeService.getCurrentPlacesList.subscribe((places) => {
-      if (places) {
-        this.dataSource = places;
+    this.roomsService.getCurrentRoomsList.subscribe((rooms) => {
+      if (rooms) {
+        this.dataSource = rooms;
       }
     });
     this.paginationService.paginationChanged.subscribe(

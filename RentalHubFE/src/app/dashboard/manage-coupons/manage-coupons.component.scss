@@ -5,11 +5,11 @@
   transform: translate(-50%, -50%);
 }
 
-.mat-column-desc {
+.mat-column-id {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 40% !important;
-  width: 40% !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
 
@@ -21,7 +21,7 @@
   hyphens: auto;
 }
 
-.mat-column-title {
+.mat-column-endow {
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 20% !important;
@@ -37,11 +37,11 @@
   hyphens: auto;
 }
 
-.mat-column-image {
+.mat-column-price {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 5% !important;
-  width: 5% !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
 
@@ -56,4 +56,12 @@
 table tr:last-child td /*To remove the last border*/ {
   border-bottom: 0 solid;
   border-radius: 8px !important;
+}
+
+.actions-delete-color {
+  color: #f44336 !important;
+}
+
+.actions-edit-color {
+  color: #007c01 !important;
 }

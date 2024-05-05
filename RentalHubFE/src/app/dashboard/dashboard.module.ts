@@ -17,6 +17,12 @@ import { UpdateEmployeeLoginDetailDialogComponent } from './update-employee-logi
 import { AddNewEmployeeDialogComponent } from './manage-users/add-new-employee-dialog/add-new-employee-dialog.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { TotalDataComponent } from './statistics/total-data/total-data.component';
+import { HotelEditDialogComponent } from './manage-hotels/hotel-edit-dialog/hotel-edit-dialog.component';
+import { PlaceEditDialogComponent } from './manage-places/place-edit-dialog/place-edit-dialog.component';
+import { CouponEditDialogComponent } from './manage-coupons/coupon-edit-dialog/coupon-edit-dialog.component';
+import { ManageRoomsComponent } from './manage-rooms/manage-rooms.component';
+import { RoomEditDialogComponent } from './manage-rooms/room-edit-dialog/room-edit-dialog.component';
+import { FlightEditDialogComponent } from './manage-flights/flight-edit-dialog/flight-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +39,12 @@ import { TotalDataComponent } from './statistics/total-data/total-data.component
     UpdateEmployeeLoginDetailDialogComponent,
     AddNewEmployeeDialogComponent,
     StatisticsComponent,
+    HotelEditDialogComponent,
+    PlaceEditDialogComponent,
+    CouponEditDialogComponent,
+    ManageRoomsComponent,
+    RoomEditDialogComponent,
+    FlightEditDialogComponent,
   ],
   imports: [CommonModule, FormsModule, DashboardRoutingModule, SharedModule],
   providers: [],

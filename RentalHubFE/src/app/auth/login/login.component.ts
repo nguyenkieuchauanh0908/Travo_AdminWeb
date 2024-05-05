@@ -36,19 +36,10 @@ export class LoginComponent implements OnInit {
     const pw = form.value.password;
 
     this.loginObs = this.authService.login(email, pw);
-    console.log(
-      '🚀 ~ file: login.component.ts:28 ~ LoginComponent ~ onSubmit ~ this.loginObs:',
-      this.loginObs
-    );
-
     this.isLoading = true;
     this.notifierService.hideAll();
     this.loginObs.subscribe(
       (res) => {
-        console.log(
-          '🚀 ~ file: login.component.ts:32 ~ LoginComponent ~ onSubmit ~ res:',
-          res
-        );
         this.notifierService.notify('success', 'Đăng nhập thành công!');
         this.isLoading = false;
         setTimeout(() => {

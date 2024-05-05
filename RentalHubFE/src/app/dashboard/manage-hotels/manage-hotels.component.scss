@@ -38,8 +38,8 @@
 .mat-column-location_description {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 30% !important;
-  width: 30% !important;
+  flex: 0 0 20% !important;
+  width: 20% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
 
@@ -86,4 +86,12 @@
 table tr:last-child td /*To remove the last border*/ {
   border-bottom: 0 solid;
   border-radius: 8px !important;
+}
+
+.actions-delete-color {
+  color: #f44336 !important;
+}
+
+.actions-edit-color {
+  color: #007c01 !important;
 }
